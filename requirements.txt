@@ -1,0 +1,3 @@
+odoorpc
+autils
+mysql-connector

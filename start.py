@@ -5,10 +5,10 @@ from utils import config, odoo_config, logger
 from sync.odoo import OdooReader
 
 
-# shop_ids = tuple(OdooReader(odoo_config.host, odoo_config.port,
-#                             odoo_config.db, odoo_config.user, odoo_config.password).get_cmb_shops())
+shop_ids = tuple(OdooReader(odoo_config.host, odoo_config.port,
+                            odoo_config.db, odoo_config.user, odoo_config.password).get_cmb_shops())
 
-shop_ids = [7, 66]
+# shop_ids = [7, 66]
 
 shop_ids = f"({shop_ids[0]})" if len(shop_ids) == 1 else tuple(shop_ids)
 

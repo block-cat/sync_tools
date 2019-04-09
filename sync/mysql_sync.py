@@ -56,3 +56,42 @@ class MysqlSync(object):
         except Exception as ex:
             self.dest_conn.rollback()
             logger.error(f"同步数据库出错：{traceback.format_exc()}")
+
+    def sync_specify(self, shop_ids):
+        """同步特殊表"""
+        # shop_order表
+        try:
+            olds = "select order_id,store_id,member_id,create_date,write_date,payed_total,receivable \
+                small_change, discount,erase,pay_type,status,operator_id,day_order_seq,payment_scenarios,\
+                    payment_channel from shop_order where store_id in {shop_ids}"
+            self.src_cr.execute(olds)
+            data = self.src_cr.fetchall()
+            for row in data:
+                insert_sql = f"replace into shop_order (order_id,store_id,member_id,create_date,write_date,amount_payed, amount_receivable, \
+                                odd_change, \
+                                discount_amount, \
+                                erase,\
+                                pay_type,\
+                                status,\
+                                operator_id,\
+                                day_order_seq,\
+                                payment_scenarios,\
+                                payment_channel) values ({','.join( '%s' for _ in range(16))})"
+                self.dest_cr.execute(insert_sql, row)
+
+            self.dest_conn.commit()
+
+            detail_sql = "select id,count,create_date,product_id,order_id,sales_status,operator,pay_type,name,operator_name,category,store_id,retail_price,trade_price,price_per, write_date\
+                from shop_sales_records"
+            self.src_cr.execute(detail_sql)
+            data = self.src_cr.fetchall()
+            for row in data:
+                inser_sql = f"replace into shop_sales_records (id,quantity,create_date,goods_code,order_id,sales_status,operator,pay_type,goods_name,operator_name,category,\
+                    store_id,retail_price,trade_price,sale_price,write_date) values ({','.join( '%s' for _ in range(16))})"
+                
+                self.dest_cr.execute(inser_sql, row)
+
+            self.dest_conn.commit()
+        except Exception as err:
+            self.dest_conn.rollback()
+            logger.error(f"订单表或订单详情表异常：{traceback.format_exc()}")

@@ -29,10 +29,17 @@ tables = [
     ("in_storage", f"shop_id in {shop_ids}"),
     ("storage_detail",
      f"storage_id in {storage_ids}" if storage_ids else '1!=1'),
-    ("shop_order", f"store_id in {shop_ids}"),
-    ("shop_sales_records", f"store_id in {shop_ids}"),
+    # ("shop_order", f"store_id in {shop_ids}"),
+    # ("shop_sales_records", f"store_id in {shop_ids}"),
     ("out_storage", f"shop_id in {shop_ids}"),
 ]
 
+# specfic_tables = [
+#     ("shop_order", f"store_id in {shop_ids}"),
+#     ("shop_sales_records", f"store_id in {shop_ids}"),
+# ]
 
-mysync.sync_table(tables)
+
+# mysync.sync_table(tables)
+
+mysync.sync_specify(shop_ids)

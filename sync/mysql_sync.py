@@ -61,6 +61,7 @@ class MysqlSync(object):
         """同步特殊表"""
         # shop_order表
         try:
+            logger.info("正在同步shop_order表...")
             olds = "select order_id,store_id,member_id,create_date,write_date,payed_total,receivable \
                 small_change, discount,erase,pay_type,status,operator_id,day_order_seq,payment_scenarios,\
                     payment_channel from shop_order where store_id in {shop_ids}"
@@ -81,6 +82,7 @@ class MysqlSync(object):
 
             self.dest_conn.commit()
 
+            logger.info("正在同步shop_sales_records表...")
             detail_sql = "select id,count,create_date,product_id,order_id,sales_status,operator,pay_type,name,operator_name,category,store_id,retail_price,trade_price,price_per, write_date\
                 from shop_sales_records"
             self.src_cr.execute(detail_sql)

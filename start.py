@@ -40,6 +40,6 @@ tables = [
 # ]
 
 
-# mysync.sync_table(tables)
+mysync.sync_table(tables)
 
 mysync.sync_specify(shop_ids)
